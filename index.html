@@ -3,38 +3,40 @@
 <head>
 	<title>PHS Personality Quiz</title>
 	<link rel="stylesheet" href="style.css" type="text/css">
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 </head>
 <body>
 
 
 <div class="app">
+
   <div class="page info">
     <div class="title">Let's get your information...</div>
     
-    <form id="infoForm">
       
-      <div class="title">Enter your name:</div>
-      <input type="text" name="fullName" value="ex. John Smith">
-      
-      <div class="title">Enter your email:</div>
-      <input type="text" name="email" value="ex. jsmith18@pembrokehill.org">
-      
-      <div class="title">Select your current grade level: </div>
-      <select name="grade" id="grade">
-        <option value="9">9th</option>
-        <option value="10">10th</option>
-        <option value="11">11th</option>
-        <option value="12">12th</option>
-      </select>
-      <br>
-      <button onclick="submitInfo();">Submit</button>
-    </form>
+    <div class="title">First name:</div>
+    <input type="text" name="firstName">
+
+    <div class="title">Last name:</div>
+    <input type="text" name="lastName">
     
+    <div class="title">Grade: </div>
+    <select name="grade" id="grade">
+      <option value="9">9th</option>
+      <option value="10">10th</option>
+      <option value="11">11th</option>
+      <option value="12">12th</option>
+    </select>
+    <br>
+
+    <div class="title" id="validForm">Fill out both name fields</div>
+
+    <button onclick="submitInfo();">Submit</button>
+
   </div>
+
   <div class="page one">
     <div class="begin">LET'S GET TO IT</div>
-    
-
     
     <div id="Qbox"></div>
     <div id="Abox">
@@ -44,57 +46,31 @@
       <div class="answer" id="a4"></div>
     </div>
   </div>
+
   <div class="page intro">
     <div class="header">PEMBROKE HILL</div>
     <div class="title">find your match</div>
     
-        <h1 id="testing">hello</h1>
-    
     <div class="start" onclick="start()">Take Quiz</div>
-    <div class="games" onclick="games()">Play Games</div>
   </div>
 
+  <div class="page results">
+    <div class="title">Your match is:</div>
+    <div class="title" id="match"></div>
+    <div class="title">in Grade <span id="matchGrade"></span> </div>
+  </div>
 
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyCCkUB9oTOgb91Sw92pWGVG90ku0fXkx4g",
-    authDomain: "parkerson-project.firebaseapp.com",
-    databaseURL: "https://parkerson-project.firebaseio.com",
-    projectId: "parkerson-project",
-    storageBucket: "",
-    messagingSenderId: "342905401401"
-  };
-  firebase.initializeApp(config);
-  
-  var testing = document.getElementById("testing");
-  var test = firebase.database().ref().child("test");
-  var testObj = {}
-  
-  test.on("child_added", function(snapshot) {
-    testObj = snapshot.val();
-    console.log(testObj);
-  });
-  
-  test.set({
-    rbaber: {
-      answers: ['a', 'b', 'c', 'd'],
-      match: "has no "
-    }
-  });
-  
-  var match = testObj['match']
-  testing.innerText = match;
-  
-</script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="script.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase-database.js"></script>
+
+
 
 </body>
 </html>

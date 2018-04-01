@@ -1,17 +1,47 @@
-$(".page").show();
-$(".intro").hide();
-$(".one").hide();
+var config = {
+  apiKey: "AIzaSyCCkUB9oTOgb91Sw92pWGVG90ku0fXkx4g",
+  authDomain: "parkerson-project.firebaseapp.com",
+  databaseURL: "https://parkerson-project.firebaseio.com",
+  projectId: "parkerson-project",
+  storageBucket: "",
+  messagingSenderId: "342905401401"
+};
 
+firebase.initializeApp(config);
+
+var testing = document.getElementById("testing");
+
+var users = firebase.database().ref().child("users");
+var respondents = firebase.database().ref();
+
+var testObj = {}
+
+users.on("child_added", function(snapshot) {
+  testObj = snapshot.val();
+});
+
+respondents.on("child_added", function(snapshot) {
+  window.respondentObject = snapshot.val();
+});
+
+
+
+$(".page").hide();
+$(".intro").show();
+$("#validForm").hide();
 
 function start() {
+  //Take Quiz button
   $(".intro").hide();
-  $(".one").show();
+  $(".info").show();
   window.game = new Model();
   showQuestion(window.game.counter);
 
 }
 
 var Model = function() {
+  this.name = "",
+  this.grade = 0,
   this.counter = 0,
   this.responses = [],
   this.questions = [
@@ -128,20 +158,108 @@ function showQuestion(ind) {
   
   console.log(window.game.responses);
   
-  //go to results page
   
 }
 
 
-
 function chooseAnswer() {
   window.game.responses.push($(this).text());
-  window.game.counter ++;
-  showQuestion(window.game.counter);
+  window.game.counter++;
+  if (window.game.counter < window.game.questions.length){
+    showQuestion(window.game.counter);
+  } else {
+    //record results, push to database, get match
+    recordAnswers();
+    console.log(window.respondentObject);
+    compareAnswers();
+  }
+  
+}
+
+function recordAnswers(){
+  users.push({
+      name: window.game.name,
+      grade: window.game.grade,
+      answers: window.game.responses
+  });
 }
 
 $(".answer").on("click", chooseAnswer);
 
 function submitInfo(){
   //record names and emails to our object
+  if (infoValid()){
+
+    //move on to quiz
+    $(".one").show();
+  } else {
+    $("#validForm").show();
+  }
+
 }
+
+function infoValid(){
+  var firstName = $('input[name="firstName"]').val().toLowerCase();
+  var lastName = $('input[name="lastName"]').val().toLowerCase();
+
+  if (firstName != "" && lastName != ""){
+
+    window.game.name = firstName[0].toUpperCase() + firstName.substring(1) + " " + lastName[0].toUpperCase() + lastName.substring(1);
+
+    console.log($('select[name="grade"]').val());
+    window.game.grade = $('select[name="grade"]').val();
+    return true;
+  } else {
+    return false;
+  }
+
+}
+
+function compareAnswers(){
+
+  var scores = [];
+  var people = [];
+  for(var person in window.respondentObject){
+    people.push(window.respondentObject[person])
+  }
+
+  //remove this person from array
+  for(var i=0; i<people.length; i++){
+    if (people[i].name == window.game.name){
+      people.splice(i, 1);
+    }
+  }
+  console.log(people);
+
+
+  for(var i=0; i<people.length; i++){
+    var score = 0;
+    for(var j=0; j<window.game.responses.length; j++){
+      if(window.game.responses[j] == people[i].answers[j]){
+        score++;
+      }
+    }
+    scores.push(score);
+  }
+
+
+  console.log(Array.max(scores));
+  console.log(scores.indexOf(Array.max(scores)));
+  console.log(people[scores.indexOf(Array.max(scores))].name);
+
+  $("#match").text(people[scores.indexOf(Array.max(scores))].name);
+  $("#matchGrade").text(people[scores.indexOf(Array.max(scores))].grade);
+  $(".page").hide();
+  $(".results").show();
+}
+
+function clearUsers(){
+  users.set({});
+}
+
+
+
+Array.max = function( array ){
+    return Math.max.apply( Math, array );
+};
+
