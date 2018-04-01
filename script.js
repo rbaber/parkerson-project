@@ -122,7 +122,7 @@ var Model = function() {
         "Stranger Things",
         "Game of Thrones",
         "It's Always Sunny in Philadelphia",
-        "Big Bag Theory"
+        "Big Bang Theory"
       ],
       [
         "Being late to school",
@@ -151,9 +151,9 @@ var Model = function() {
 
 function showQuestion(ind) {
   $("#Qbox").text(game.questions[ind]);
-
-  for (var j = 1; j < game.answers[ind].length + 1; j++) {
-    $("#a" + j).html(game.answers[ind][j-1]);
+  $(".answer").html("");
+  for (var j = 0; j < game.answers[ind].length ; j++) {
+    $("#a" + j).html(game.answers[ind][j]);
   }
   
   console.log(window.game.responses);
