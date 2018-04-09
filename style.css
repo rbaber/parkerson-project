@@ -1,11 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Bungee+Inline|Bungee+Shade|Indie+Flower|Spectral+SC');
 
+body{
+margin: 0;
+padding: 0;
+background: lightSlateGrey;
+}
+
 .app {
-  min-width: 540px;
-  min-height: 540px;
-  max-width: 700px;
-  background: royalBlue;
+  width: 540px;
+  height: 540px;
   position: relative;
+  margin: 0 auto;
 }
 
 .page {
@@ -27,6 +32,12 @@
   font-family: "indie flower";
   text-align: center;
   font-size: 50px;
+}
+
+.gif{
+  height: 200px;
+  width: 200px;
+  margin-left: 170px;
 }
 
 .start {
@@ -110,4 +121,19 @@
 
 .answer:hover {
   color: brown;
+}
+
+input{
+  display: block;
+  margin: 0 auto;
+}
+
+select{
+  display: block;
+  margin: 0 auto;
+}
+
+button{
+  display: block;
+  margin: 0 auto;
 }
